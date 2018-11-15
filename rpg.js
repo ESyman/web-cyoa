@@ -79,8 +79,8 @@ function checkAnswers(answer) {
         case "LOOK POSTER":
           lookPoster();
           break;
-        case "PEEL OFF POSTER":
-          peelPoster();
+        case "GET POSTER":
+          getPoster();
           break;
         case "LOOK KEY":
           lookKey();
@@ -89,11 +89,11 @@ function checkAnswers(answer) {
           getKey();
           break;
           //main room
-        case "LOOK NORTHMOST DOOR":
-          lookNorthMainDoor();
+        case "LOOK DOORS":
+          lookDoorsSou();
           break;
         case "OPEN NORTHMOST DOOR":
-          openNorthMainDoor();
+          openNorthDoorSou();
           break;
         case "LOOK GLOVES":
           lookGloves();
@@ -125,7 +125,7 @@ function checkAnswers(answer) {
         case "LOOK SOUTHMOST DOOR":
           switch(roomLocation){
             case 2:
-              lookSouthMainDoor();
+              lookSouthDoorSou();
               break;
             case 3:
               lookSouthNorDoor();
@@ -134,13 +134,13 @@ function checkAnswers(answer) {
         case "OPEN SOUTHMOST DOOR":
           switch(roomLocation){
             case 2:
-              openSouthMainDoor();
+              openSouthDoorSou();
               break;
             case 3:
               mainRoom();
           }
           break;
-        case "HELP":
+        /*case "HELP":
           switch(roomLocation) {
             case 1:
               story("You find yourself stuck in a dungeon room. A SKELETON sits nearby you. A POSTER is on the wall. There’s a KEY nearby.");
@@ -154,7 +154,7 @@ function checkAnswers(answer) {
             case 4:
               story("You find yourself in an empty room, minus the GIANT KEY in the middle of it. The door leads back to the room you came from.");
           }
-          break;
+          break;*/
         case "GO BACK":
           switch(roomLocation) {
             case 1:
@@ -179,6 +179,7 @@ function checkAnswers(answer) {
           gotGiantKey = false;
           norRoomDoorOne = false;
           eastDoor = false;
+          roomLocation = 0;
           break;
       }
 }
@@ -195,11 +196,14 @@ function intro(){
 function dungeonRoom(){
   roomLocation = 1;
 story("You find yourself stuck in a dungeon room. A SKELETON sits nearby you. A POSTER is on the wall. There’s a KEY nearby.");
-choices = ["LOOK DOOR", "OPEN DOOR", "LOOK SKELETON", "GET SKELETON", "TALK SKELETON", "LOOK POSTER", "LOOK KEY", "GET KEY", "HELP"];
+choices = ["LOOK SKELETON", "LOOK POSTER", "LOOK DOOR"];
 answer = setOptions(choices);
 }
 function lookDungeonDoor(){
-story("It’s a door. What else do you think it is?");
+  if (dungeonDoor == false) story("It’s a door, and it's locked.");
+  else story("It’s a door, and it's clearly unlocked, as you learned.");
+  choices = ["OPEN DOOR", "GO BACK"];
+answer = setOptions(choices);
 }
 function openDungeonDoor(){
   if (gotKey == false) story("You attempt to open the door by doing nothing. Maybe you should find a key.");
@@ -211,7 +215,9 @@ function openDungeonDoor(){
   } else mainRoom();
 }
 function lookSkeleton(){
-story("It’s a very cheap looking skeleton, like somebody bought it from a thrift shop");
+  story("It’s a very cheap looking skeleton, like somebody bought it from a thrift shop.");
+  choices = ["GET SKELETON", "TALK SKELETON", "GO BACK"];
+  answer = setOptions(choices);
 }
 function getSkeleton(){
   if (gotClip == false) {
@@ -230,22 +236,29 @@ function talkSkeleton(){
   }
 }
 function lookPoster(){
-  if (gotPoster == false){
-    story("It’s a very generic looking poster for… something. You can’t quite make up your mind on what it’s exactly about. A corner of it seems to be peeling off the wall. Perhaps it’s hiding something?");
-    choices = ["PEEL OFF POSTER", "GO BACK"];
-    answer = setOptions(choices);
-  } else story("The area where the poster used to be is just some remaining bits of torn paper.")
+  if (gotPoster == false && gotKey == false) story("It’s a very generic looking poster for… something, like a bunch of numbers. You can’t quite make up your mind on what it’s exactly about. A corner of it seems to be peeling off the wall. Perhaps it’s hiding something? \nSpeaking of hiding, there's a key hiding nearby.");
+  else if (gotPoster == true && gotKey == false) story("The area where the poster used to be is just some remaining bits of torn paper. There's a KEY nearby it, though.")
+  else if (gotPoster == false && gotKey == true) story("It’s a very generic looking poster for… something, like a bunch of numbers. You can’t quite make up your mind on what it’s exactly about. A corner of it seems to be peeling off the wall. Perhaps it’s hiding something?")
+  else if (gotPoster == true && gotKey == true) story("The area where the poster used to be is just some remaining bits of torn paper.")
+  choices = ["GET POSTER", "LOOK KEY", "GO BACK"];
+  answer = setOptions(choices);
 }
-function peelPoster(){
-  story("You peel off the poster and look at what’s behind it, and… it’s nothing. It’s just the wall. Oh well, at least you have that poster with you.");
+function getPoster(){
+  if (gotPoster == false) {
+    story("You peel off the poster and look at what’s behind it, and… it’s nothing. It’s just the wall. Oh well, at least you have that poster with you.");
   gotPoster = true;
-  choices = ["GO BACK"];
-  answer = setOptions(choices)
+  } else story("You already got the poster, and I don't think you want those remaining bits of torn paper.")
 }
 function lookKey(){
   if (gotKey == false) story("Well… it’s a key. What do you think it does?");
-  else story("You mean the one you already grabbed?")
+  else story("You look at the key that you already grabbed, and then where it was placed priorly.")
+  choices = ["GET KEY", "LOOK POSTER", "GO BACK"];
+  answer = setOptions(choices);
 }
+/*function lookKey(){
+  if (gotKey == false) story("Well… it’s a key. What do you think it does?");
+  else story("You mean the one you already grabbed?")
+}*/
 function getKey(){
   if (gotKey == false) {
     story("You grab the key! You're one step closer to escaping this room of boredom.");
@@ -256,19 +269,22 @@ function getKey(){
 function mainRoom(){
   roomLocation = 2;
 story("You're now in what appears to be somebody's basement. Perhaps that last room wasn't a dungeon but a really poorly kept room. There's a door to the SOUTH leading back into said room, as well as another door to the NORTH. There are some GLOVES nearby.");
-choices = ["LOOK SOUTHMOST DOOR", "OPEN SOUTHMOST DOOR", "LOOK NORTHMOST DOOR", "OPEN NORTHMOST DOOR", "LOOK GLOVES", "GET GLOVES", "HELP"];
+choices = ["LOOK GLOVES", "LOOK DOORS"];
 answer = setOptions(choices);
 }
-function lookSouthMainDoor(){
+function lookDoorsSou(){
+  if (mainDoor == false) story("There are two doors in the room; one that leads back the way you came (southwards) and one that goes forwards (northwards), although it looks like it's jammed shut.");
+  else story("There are two doors in the room; one that leads back the way you came (southwards) and one that goes forwards (northwards).");
+  choices = ["OPEN SOUTHMOST DOOR", "OPEN NORTHMOST DOOR", "GO BACK"];
+answer = setOptions(choices);
+}
+function lookSouthDoorSou(){
   story("It's the door that'll take you back into... well, that room you started in.");
 }
-function openSouthMainDoor(){
-  dungeonRoom();
-}
-function lookNorthMainDoor(){
+function lookNorthDoorSou(){
   story("Did you forget what doors look like or are you just intentionally wasting your time?");
 }
-function openNorthMainDoor(){
+function openNorthDoorSou(){
   if (gotClip == false && mainDoor == false) story("It's locked, and that key isn't doing any good. Perhaps there's something else of use in another room.");
   else if (mainDoor == false && gotClip == true){ 
     story("You unlock the door using the clip to pickpocket it. Unfortunately, you broke the clip in the process, but hey, the door's unlocked!");
