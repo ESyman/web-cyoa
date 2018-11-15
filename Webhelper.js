@@ -4,7 +4,7 @@ window.onload = start;
 
 function start() {
     setup();
-    tollbooth();
+    intro();
 }
 
 function story(text) {
