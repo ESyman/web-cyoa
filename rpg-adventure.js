@@ -1,6 +1,4 @@
 /* This is a starter with examples.  Remove the examples once you have made your own versions. */
-
-'use strict'
 // variables
 var messages = [];
 var choices;
@@ -134,7 +132,7 @@ function checkAnswers(answer) {
         case "OPEN SOUTHMOST DOOR":
           switch(roomLocation){
             case 2:
-              openSouthDoorSou();
+              dungeonRoom();
               break;
             case 3:
               mainRoom();
@@ -269,7 +267,7 @@ function getKey(){
 function mainRoom(){
   roomLocation = 2;
 story("You're now in what appears to be somebody's basement. Perhaps that last room wasn't a dungeon but a really poorly kept room. There's a door to the SOUTH leading back into said room, as well as another door to the NORTH. There are some GLOVES nearby.");
-choices = ["LOOK GLOVES", "LOOK DOORS"];
+choices = ["LOOK GLOVES", "GET GLOVES", "LOOK DOORS"];
 answer = setOptions(choices);
 }
 function lookDoorsSou(){
@@ -278,12 +276,12 @@ function lookDoorsSou(){
   choices = ["OPEN SOUTHMOST DOOR", "OPEN NORTHMOST DOOR", "GO BACK"];
 answer = setOptions(choices);
 }
-function lookSouthDoorSou(){
+/*function lookSouthDoorSou(){
   story("It's the door that'll take you back into... well, that room you started in.");
 }
 function lookNorthDoorSou(){
   story("Did you forget what doors look like or are you just intentionally wasting your time?");
-}
+}*/
 function openNorthDoorSou(){
   if (gotClip == false && mainDoor == false) story("It's locked, and that key isn't doing any good. Perhaps there's something else of use in another room.");
   else if (mainDoor == false && gotClip == true){ 
@@ -296,7 +294,6 @@ function openNorthDoorSou(){
 function lookGloves(){
   if (gotGloves == false) {
     story("They're fairly hard-duty gloves and look like they could lift up something heavy.");
-    gotKey = true;
   } else story("Did you forget they're on your hands or something?")
 }
 function getGloves(){
@@ -308,16 +305,35 @@ function getGloves(){
 //northmost Room
 function northmostRoom(){
   roomLocation = 3;
-story("You find yourself in another generic room. There's a locked DOOR to the east and another DOOR to the west. There's a DOOR to the south in which you came from.");
-choices = ["LOOK SOUTHMOST DOOR", "OPEN SOUTHMOST DOOR", "LOOK EASTWARDS DOOR", "OPEN EASTWARDS DOOR", "LOOK WESTWARDS DOOR", "OPEN WESTWARDS DOOR", "HELP"];
+story("You find yourself in another generic room. There's a locked DOOR to the east, another DOOR to the west, and a door in the south, which is already unlocked. There’s a BAG on the ground.");
+choices = ["LOOK BAG", "LOOK DOORS", "GO SOUTH"];
 answer = setOptions(choices);
 }
-function lookSouthNorDoor(){
-  story("Gee, I wonder where it'll take you.");
+function lookBag(){
+  story("It's a bag filled with all sorts of assorted goodies inside. Nobody seems to own it... maybe you could take it?");
+choices = ["GET BAG", "GET GOODIES", "GO BACK"];
+answer = setOptions(choices);
 }
-function lookEastwardsDoor(){
+function getBag(){
+  story("You try to grab the bag, but before you do, a hand reaches out of it, grabbing you in the process and stuffing you into it. GAME OVER. Play again?");
+choices = ["Y", "N"];
+answer = setOptions(choices);
+}
+function getGoodies(){
+  story("You try to grab some of the goodies within the bag, but before you do, a hand reaches out of it, grabbing you in the process and stuffing you into it. GAME OVER. Play again?");
+choices = ["Y", "N"];
+answer = setOptions(choices);
+}
+
+function lookDoorsNor(){
+  story("There's a selection of three doors; one to the east that has a keypad on it and one to the west that has a lockhole on it. Oops, did we say three? We meant two.");
+  choices = ["OPEN EASTWARDS DOOR", "OPEN WESTWARDS DOOR", "GO BACK"];
+  answer = setOptions(choices);
+}
+
+/*function lookEastwardsDoor(){
   story("It's a door that has a keypad on it.")
-}
+}*/
 function openEastwardsDoor(){
   if (gotPoster == false) story("The door is locked with a numberpad on it. You try to figure out it by pressing random numbers but it does nothing. Perhaps something has the code.")
   else if (gotPoster == true && eastDoor == false) {
@@ -327,10 +343,10 @@ function openEastwardsDoor(){
     answer = setOptions(choices);
   } else if (eastDoor == true) eastRoom();
 }
-function lookWestwardsDoor(){
+/*function lookWestwardsDoor(){
   if (norRoomDoorOne == false) story("Well... it's a door with a keyhole on it. What do you think it is by now?")
   else story("Well... it's a door with a giant keyhole on it. What do you think it is by now?")
-}
+}*/
 function openWestwardsDoor(){
   if (norRoomDoorOne == false){
     story("You open the door with the key... Only to find out there's another door with a larger keyhole. Drats! You were so close.")
