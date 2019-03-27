@@ -1,5 +1,7 @@
 /* Uses Case Statements */
 
+scene1 = intro;
+
 // variables
 var messages = [];
 var choices;
